@@ -58,8 +58,8 @@ def main():
         with open(STATE_FILE, "r") as f:
             last_status = f.read().strip()
 
-    # Logic: Notify if status is "Closed" (TESTING MODE)
-    is_open = "Closed" in prof or "Closed" in comm
+    # Logic: Notify if status is "Open" and it's different from the last time we notified
+    is_open = "Open" in prof or "Open" in comm
     
     if is_open and current_status != last_status:
         message = (

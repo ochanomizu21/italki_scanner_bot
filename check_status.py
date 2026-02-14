@@ -1,5 +1,6 @@
 import os
 import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 
 URL = "https://support.italki.com/hc/en-us/articles/115001499873-Is-my-language-open-for-application"
@@ -17,10 +18,8 @@ def send_telegram_message(message):
 
 def get_russian_status():
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
-        response = requests.get(URL, headers=headers, timeout=10)
+        scraper = cloudscraper.create_scraper()
+        response = scraper.get(URL, timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         

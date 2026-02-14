@@ -17,7 +17,10 @@ def send_telegram_message(message):
 
 def get_russian_status():
     try:
-        response = requests.get(URL, timeout=10)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+        response = requests.get(URL, headers=headers, timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         
@@ -56,19 +59,14 @@ def main():
         with open(STATE_FILE, "r") as f:
             last_status = f.read().strip()
 
-    # Logic: Notify if status is "Open" and it's different from the last time we notified
-    is_open = "Open" in prof or "Open" in comm
+    # Logic: Notify if status is "Closed" (TESTING MODE)
+    is_open = "Closed" in prof or "Closed" in comm
     
     if is_open and current_status != last_status:
         message = (
-            "🚨 *italki Russian Application Status Change!* 🚨
-
-"
-            f"• Professional Teacher: *{prof}*
-"
-            f"• Community Tutor: *{comm}*
-
-"
+            f"🚨 *italki Russian Application Status Change!* 🚨\n\n"
+            f"• Professional Teacher: *{prof}*\n"
+            f"• Community Tutor: *{comm}*\n\n"
             f"[Check here]({URL})"
         )
         send_telegram_message(message)
